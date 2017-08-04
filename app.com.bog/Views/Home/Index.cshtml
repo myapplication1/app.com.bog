@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@*@Styles.Render("~/Content/bundle")
+    @Styles.Render("~/Content/DevExtremeBundle")
+    @Scripts.Render("~/Scripts/bundle")
+    @Scripts.Render("~/Scripts/DevExtremeBundle")*@
+
+
+
+@(Html.DevExtreme().DataGrid()
+    .ShowBorders(true)
+    .DataSource(d => d.WebApi().Controller("Orders").Key("AccountID"))
+    .Columns(columns => {
+        columns.Add().DataField("AccountID");
+        columns.Add().DataField("AccountDate").DataType(GridColumnDataType.Date);
+        columns.Add().DataField("CustomerName");
+        columns.Add().DataField("ShipCountry");
+        columns.Add().DataField("ShipCity");
+    })
+    .Paging(p => p.PageSize(10))
+    .FilterRow(f => f.Visible(true))
+    .HeaderFilter(f => f.Visible(true))
+    .GroupPanel(p => p.Visible(true))
+    .Grouping(g => g.AutoExpandAll(false))
+    .RemoteOperations(true)
+    .Summary(s => s
+        .TotalItems(totalItems => {
+            totalItems.Add().Column("ShipCity").SummaryType(SummaryType.Count);
+        })
+        .GroupItems(groupItems => {
+            groupItems.Add().SummaryType(SummaryType.Count);
+        })
+    )
+)
+
