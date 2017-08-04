@@ -45,3 +45,6 @@ e:\users\project\documents\visual studio 2015\Projects\app.com.bog\app.com.bog\b
 e:\users\project\documents\visual studio 2015\Projects\app.com.bog\app.com.bog\bin\System.Web.WebPages.Razor.xml
 e:\users\project\documents\visual studio 2015\Projects\app.com.bog\app.com.bog\obj\Debug\app_com_bog.dll
 e:\users\project\documents\visual studio 2015\Projects\app.com.bog\app.com.bog\obj\Debug\app_com_bog.pdb
+E:\Users\PROJECT\Source\Repos\app.com.bog\app.com.bog\obj\Debug\app.com.bog.csprojResolveAssemblyReference.cache
+E:\Users\PROJECT\Source\Repos\app.com.bog\app.com.bog\obj\Debug\app_com_bog.dll
+E:\Users\PROJECT\Source\Repos\app.com.bog\app.com.bog\obj\Debug\app_com_bog.pdb
