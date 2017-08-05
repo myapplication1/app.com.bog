@@ -5,42 +5,44 @@
     background-color: #5186C3;
 }
 
+
 .dx-datagrid-header-panel .dx-toolbar-items-container  {
-    height: 70px;
+    height: 50px;
 }
+   
+    .dx-datagrid-header-panel .dx-toolbar-before {
+        background-color: #ffffff;
+    }
+ </style>
+@*
+    .dx-datagrid-header-panel .dx-selectbox {
+         margin: 17px 10px;
+    }
 
-.dx-datagrid-header-panel .dx-toolbar-before {
-    background-color: #337AB7;
-}
+    .dx-datagrid-header-panel .dx-button {
+         margin: 17px 0;
+    }
 
-.dx-datagrid-header-panel .dx-selectbox {
-     margin: 17px 10px;
-}
+    .informer {
+        height: 70px;
+        width: 130px;
+        text-align: center;
+        background: #2A507C url("../../images/DataGrid/arrow.png") no-repeat 100% 50%;
+    }
 
-.dx-datagrid-header-panel .dx-button {
-     margin: 17px 0;
-}
+    .count {
+        color: #fff;
+        padding-top: 15px;
+        line-height: 27px;
+        font-size: 28px;
+        font-weight: normal;
+        font-family: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+    }
 
-.informer {
-    height: 70px;
-    width: 130px;
-    text-align: center;
-    background: #2A507C url("../../images/DataGrid/arrow.png") no-repeat 100% 50%;
-}
-
-.count {
-    color: #fff;
-    padding-top: 15px;
-    line-height: 27px;
-    font-size: 28px;
-    font-weight: normal;
-    font-family: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
-}
-
-.name {
-    color: #619dd1;
-}
-    </style>
+    .name {
+        color: #619dd1;
+    }
+        </style>*@
 
 @{
     ViewBag.Title = "Index";
@@ -178,7 +180,7 @@
 
           columns.Add()
                 .DataField("DatePosted")
-             .DataType(GridColumnDataType.Date)
+             .DataType(GridColumnDataType.Date).SetCellValue(DateTime.Now.ToShortDateString())
                 .Width(125);
 
           columns.Add()
@@ -187,7 +189,13 @@
           columns.Add()
               .DataField("CurrencyType")
               .Width(130)
-            .GroupIndex(0);
+            .GroupIndex(0)
+          .Lookup(lookup => lookup
+              .DataSource(d => d.WebApi().Controller("_Sales").LoadAction("GetCurrencyLookup").Key("ID"))
+              .DisplayExpr("Label")
+              .AllowClearing(false)
+              .ValueExpr("ID"));
+
           columns.Add()
               .DataField("Amount")
               //   .Caption("State")
@@ -204,7 +212,8 @@
           // .Width(125);
 
           columns.Add()
-              .DataField("TotalAmount");
+              .DataField("TotalAmount").Format("n2");
+
 
 
           //  .DataType(GridColumnDataType.Date)

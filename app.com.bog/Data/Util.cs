@@ -22,5 +22,14 @@ namespace app_com_bog.Data
             return res_;
             
        }
+
+        public List<tb_currency> CurrencyLookup()
+        {
+            var res_ = (from x in db.tb_currency select x).ToList();
+            //db.tb_sales_transactions.ToList();
+
+            return res_;
+
+        }
     }
 }

@@ -19,6 +19,14 @@ namespace app_com_bog.Controllers.ApiControllers
         _DbContext db = new _DbContext();
         Util obj = new Util();
 
+
+        [HttpGet]
+        public HttpResponseMessage GetCurrencyLookup(DataSourceLoadOptions loadOptions)
+        {
+            return Request.CreateResponse(DataSourceLoader.Load((ICollection<tb_currency>)obj.CurrencyLookup(), loadOptions));
+        }
+
+
         [HttpGet]
         public HttpResponseMessage Get(DataSourceLoadOptions loadOptions)
         {
