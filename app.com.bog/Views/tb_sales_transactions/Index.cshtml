@@ -1,0 +1,266 @@
+﻿<style>
+.dx-datagrid-header-panel .dx-toolbar {
+    margin: 0;
+    padding-right: 20px;
+    background-color: #5186C3;
+}
+
+.dx-datagrid-header-panel .dx-toolbar-items-container  {
+    height: 70px;
+}
+
+.dx-datagrid-header-panel .dx-toolbar-before {
+    background-color: #337AB7;
+}
+
+.dx-datagrid-header-panel .dx-selectbox {
+     margin: 17px 10px;
+}
+
+.dx-datagrid-header-panel .dx-button {
+     margin: 17px 0;
+}
+
+.informer {
+    height: 70px;
+    width: 130px;
+    text-align: center;
+    background: #2A507C url("../../images/DataGrid/arrow.png") no-repeat 100% 50%;
+}
+
+.count {
+    color: #fff;
+    padding-top: 15px;
+    line-height: 27px;
+    font-size: 28px;
+    font-weight: normal;
+    font-family: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+}
+
+.name {
+    color: #619dd1;
+}
+    </style>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@model IEnumerable<app_com_bog.Models.tb_sales_transactions>*@
+
+
+<script>
+    function toolbar_preparing(e) {
+        var dataGrid = e.component;
+
+        e.toolbarOptions.items.unshift({
+            location: "before",
+            template: function() {
+                return $("<div/>")
+                    .addClass("informer")
+                    .append(
+                       $("<h2 />")
+                         .addClass("count")
+                         .text(getGroupCount("CurrencyType")),
+                       $("<span />")
+                         .addClass("name")
+                         .text("Total Count")
+                    );
+            }
+        }, {
+            location: "before",
+            widget: "dxSelectBox",
+            options: {
+                width: 200,
+                items: [{
+                    value: "CurrencyType",
+                    text: "Grouping by Currency"
+                }, {
+                    value: "Employee",
+                    text: "Grouping by Employee"
+                }],
+                displayExpr: "text",
+                valueExpr: "value",
+                value: "CurrencyType",
+                onValueChanged: function(e) {
+                    dataGrid.clearGrouping();
+                    dataGrid.columnOption(e.value, "groupIndex", 0);
+                    $(".informer .count").text(getGroupCount(e.value));
+                }
+            }
+        }, {
+            location: "before",
+            widget: "dxButton",
+            options: {
+                hint: "Collapse All",
+                icon: "chevrondown",
+                onClick: function(e) {
+                    var expanding = e.component.option("icon") === "chevronnext";
+                    dataGrid.option("grouping.autoExpandAll", expanding);
+                    e.component.option({
+                        icon: expanding ? "chevrondown" : "chevronnext",
+                        hint: expanding ? "Collapse All" : "Expand All"
+                    });
+                }
+            }
+        }, {
+            location: "after",
+            widget: "dxButton",
+            options: {
+                icon: "refresh",
+                onClick: function() {
+                    dataGrid.refresh();
+                }
+            }
+        });
+    }
+
+    function getGroupCount(groupField) {
+        var orders = [];
+
+        $("#gridContainer").dxDataGrid("instance")
+            .option("dataSource")
+            .store
+            .load()
+            .done(function(data) {
+                orders = data;
+            });
+
+        return DevExpress.data.query(orders)
+            .groupBy(groupField)
+            .toArray().length;
+    }
+</script>
+
+
+
+
+@(Html.DevExtreme().DataGrid()
+              .ID("gridContainer")
+              .Paging(paging => paging.Enabled(false))
+              .ColumnChooser(c => c.Enabled(true))
+               .FilterRow(filterRow => filterRow
+            .Visible(true)
+            .ApplyFilter(GridApplyFilterMode.Auto))
+          .Selection(s => s.Mode(SelectionMode.Multiple))
+        .Export(e => e.Enabled(true).FileName("sales").AllowExportSelectedData(true))
+        .AllowColumnReordering(true)
+        .Grouping(grouping => grouping.AutoExpandAll(true))
+         .SearchPanel(searchPanel => searchPanel
+            .Visible(true)
+            .Width(240)
+            .Placeholder("Search..."))
+  .GroupPanel(groupPanel => groupPanel.Visible(true))
+    .Paging(paging => paging.PageSize(10))
+     .Editing(e => e.Mode(GridEditMode.Popup)
+            .AllowUpdating(true)
+            .AllowDeleting(true)
+            .AllowAdding(true)
+            .Popup(p => p
+                .Title("Sales Book")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(300)
+                .Position(pos => pos
+                    .My(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .At(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .Of(new JS("window"))
+                )
+            )
+        )
+
+      .Columns(columns =>
+      {
+          //columns.Add()
+          //    .DataField("ID")
+          //    .Caption("#");
+
+          columns.Add()
+                .DataField("DatePosted")
+             .DataType(GridColumnDataType.Date)
+                .Width(125);
+
+          columns.Add()
+              .DataField("RecNo");
+
+          columns.Add()
+              .DataField("CurrencyType")
+              .Width(130)
+            .GroupIndex(0);
+          columns.Add()
+              .DataField("Amount")
+              //   .Caption("State")
+              .Width(125);
+          //.Lookup(lookup => lookup
+          //    .DataSource(d => d.WebApi().Controller("DataGridStatesLookup").LoadAction("Get").Key("ID"))
+          //    .DisplayExpr("Name")
+          //    .ValueExpr("ID")
+          //);
+
+          columns.Add()
+                .DataField("Rate");
+          // .DataType(GridColumnDataType.Date)
+          // .Width(125);
+
+          columns.Add()
+              .DataField("TotalAmount");
+
+
+          //  .DataType(GridColumnDataType.Date)
+          //.Width(125);
+      })
+
+        .Summary(s => s.TotalItems(items =>
+        {
+            items.Add()
+              .Column("ID")
+              .SummaryType(SummaryType.Count);
+
+
+            items.Add()
+                .Column("TotalAmount")
+                .SummaryType(SummaryType.Sum)
+                .ValueFormat(Format.Currency);
+        })
+
+
+
+
+
+)
+       .OnContentReady(@<text>
+        function(e) {
+        moveEditColumnToLeft(e.component);
+        }
+    </text>)
+    .OnCellPrepared("cell_prepared")
+ .DataSource(d => d.WebApi().Controller("_Sales").Key("ID"))
+)
+
+
+<script>
+    function moveEditColumnToLeft(dataGrid) {
+        dataGrid.columnOption("command:edit", {
+            visibleIndex: -1,
+            width: 80
+        });
+    }
+
+    function cell_prepared(e) {
+        if(e.rowType === "data" && e.column.command === "edit") {
+            var isEditing = e.row.isEditing,
+                $links = e.cellElement.find(".dx-link");
+
+            $links.text("");
+
+            if(isEditing) {
+                $links.filter(".dx-link-save").addClass("dx-icon-save");
+                $links.filter(".dx-link-cancel").addClass("dx-icon-revert");
+            } else {
+                $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+                $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+            }
+        }
+    }
+</script>

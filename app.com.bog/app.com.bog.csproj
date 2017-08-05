@@ -253,6 +253,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\tb_sales_transactions\Create.cshtml" />
+    <Content Include="Views\tb_sales_transactions\Delete.cshtml" />
+    <Content Include="Views\tb_sales_transactions\Details.cshtml" />
+    <Content Include="Views\tb_sales_transactions\Edit.cshtml" />
+    <Content Include="Views\tb_sales_transactions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -280,16 +285,60 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Data\_DbContext.cs" />
+    <Compile Include="Controllers\tb_sales_transactionsController.cs" />
+    <Compile Include="Data\Api\_Sales.cs" />
+    <Compile Include="Data\InMemorySalesDataContext.cs" />
+    <Compile Include="Data\Util.cs" />
+    <Compile Include="Entities\SalesVM.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708050159287_Sales_Model.cs" />
+    <Compile Include="Migrations\201708050159287_Sales_Model.Designer.cs">
+      <DependentUpon>201708050159287_Sales_Model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708050306272_Sales_Model_1.cs" />
+    <Compile Include="Migrations\201708050306272_Sales_Model_1.Designer.cs">
+      <DependentUpon>201708050306272_Sales_Model_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708050309583_Sales_Model_2.cs" />
+    <Compile Include="Migrations\201708050309583_Sales_Model_2.Designer.cs">
+      <DependentUpon>201708050309583_Sales_Model_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708051232041_Sales_Model_22.cs" />
+    <Compile Include="Migrations\201708051232041_Sales_Model_22.Designer.cs">
+      <DependentUpon>201708051232041_Sales_Model_22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708051309533_Sales_Model_4.cs" />
+    <Compile Include="Migrations\201708051309533_Sales_Model_4.Designer.cs">
+      <DependentUpon>201708051309533_Sales_Model_4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\tb_currency.cs" />
+    <Compile Include="Models\tb_purchases_transactions.cs" />
+    <Compile Include="Models\tb_sales_transactions.cs" />
     <Compile Include="Models\SampleData.cs" />
+    <Compile Include="Data\_DbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Entities\" />
+    <EmbeddedResource Include="Migrations\201708050159287_Sales_Model.resx">
+      <DependentUpon>201708050159287_Sales_Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708050306272_Sales_Model_1.resx">
+      <DependentUpon>201708050306272_Sales_Model_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708050309583_Sales_Model_2.resx">
+      <DependentUpon>201708050309583_Sales_Model_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708051232041_Sales_Model_22.resx">
+      <DependentUpon>201708051232041_Sales_Model_22.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708051309533_Sales_Model_4.resx">
+      <DependentUpon>201708051309533_Sales_Model_4.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,121 @@
+﻿@model app_com_bog.Models.tb_sales_transactions
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>tb_sales_transactions</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DatePosted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DatePosted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.US_Dollars)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.US_Dollars)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BritishPounds)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BritishPounds)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Yen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Yen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CFA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CFA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Euro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Euro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CanDollar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CanDollar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserPosted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserPosted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserModified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserModified)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
