@@ -52,6 +52,147 @@
 @*@model IEnumerable<app_com_bog.Models.tb_sales_transactions>*@
 
 
+
+
+
+
+
+@(Html.DevExtreme().DataGrid()
+              .ID("gridContainer")
+              .Paging(paging => paging.Enabled(false))
+              .ColumnChooser(c => c.Enabled(true))
+               .FilterRow(filterRow => filterRow
+            .Visible(true)
+            .ApplyFilter(GridApplyFilterMode.Auto))
+          .Selection(s => s.Mode(SelectionMode.Multiple))
+        .Export(e => e.Enabled(true).FileName("sales").AllowExportSelectedData(true))
+        .AllowColumnReordering(true)
+        .Grouping(grouping => grouping.AutoExpandAll(true))
+         .SearchPanel(searchPanel => searchPanel
+            .Visible(true)
+            .Width(240)
+            .Placeholder("Search..."))
+  .GroupPanel(groupPanel => groupPanel.Visible(true))
+    .Paging(paging => paging.PageSize(10))
+     .Editing(e => e.Mode(GridEditMode.Popup)
+            .AllowUpdating(true)
+            .AllowDeleting(true)
+            .AllowAdding(true)
+            .Popup(p => p
+                .Title("Sales Book")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(300)
+                .Position(pos => pos
+                    .My(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .At(HorizontalAlignment.Center, VerticalAlignment.Top)
+                    .Of(new JS("window"))
+                )
+            )
+        )
+
+      .Columns(columns =>
+      {
+          //columns.Add()
+          //    .DataField("ID")
+          //    .Caption("#");
+
+          columns.Add()
+                .DataField("DatePosted")
+             .DataType(GridColumnDataType.Date).SetCellValue(DateTime.Now.ToShortDateString())
+                .Width(125);
+
+          columns.Add()
+              .DataField("RecNo");
+
+          columns.Add()
+              .DataField("CurrencyType")
+              .Width(130)
+         //   .GroupIndex(0)
+          .Lookup(lookup => lookup
+              .DataSource(d => d.WebApi().Controller("_Sales").LoadAction("GetCurrencyLookup").Key("ID"))
+              .DisplayExpr("Label")
+              .AllowClearing(false)
+              .ValueExpr("ID"));
+
+          columns.Add()
+              .DataField("Amount")
+              //   .Caption("State")
+              .Width(125);
+          //.Lookup(lookup => lookup
+          //    .DataSource(d => d.WebApi().Controller("DataGridStatesLookup").LoadAction("Get").Key("ID"))
+          //    .DisplayExpr("Name")
+          //    .ValueExpr("ID")
+          //);
+
+          columns.Add()
+                .DataField("Rate");
+          // .DataType(GridColumnDataType.Date)
+          // .Width(125);
+
+          columns.Add()
+              .DataField("TotalAmount")
+              .Format(Format.Currency);
+
+
+
+          //  .DataType(GridColumnDataType.Date)
+          //.Width(125);
+      })
+
+        .Summary(s => s.TotalItems(items =>
+        {
+            items.Add()
+              .Column("ID")
+              .SummaryType(SummaryType.Count);
+
+
+            items.Add()
+                .Column("TotalAmount")
+                .SummaryType(SummaryType.Sum)
+                .ValueFormat(Format.Currency);
+        })
+
+
+
+
+
+)
+       .OnContentReady(@<text>
+        function(e) {
+        moveEditColumnToLeft(e.component);
+        }
+    </text>)
+    .OnCellPrepared("cell_prepared")
+ .DataSource(d => d.WebApi().Controller("_Sales").Key("ID"))
+)
+
+
+<script>
+    function moveEditColumnToLeft(dataGrid) {
+        dataGrid.columnOption("command:edit", {
+            visibleIndex: -1,
+            width: 80
+        });
+    }
+
+    function cell_prepared(e) {
+        if(e.rowType === "data" && e.column.command === "edit") {
+            var isEditing = e.row.isEditing,
+                $links = e.cellElement.find(".dx-link");
+
+            $links.text("");
+
+            if(isEditing) {
+                $links.filter(".dx-link-save").addClass("dx-icon-save");
+                $links.filter(".dx-link-cancel").addClass("dx-icon-revert");
+            } else {
+                $links.filter(".dx-link-edit").addClass("dx-icon-edit");
+                $links.filter(".dx-link-delete").addClass("dx-icon-trash");
+            }
+        }
+    }
+</script>
 <script>
     function toolbar_preparing(e) {
         var dataGrid = e.component;
@@ -132,144 +273,5 @@
         return DevExpress.data.query(orders)
             .groupBy(groupField)
             .toArray().length;
-    }
-</script>
-
-
-
-
-@(Html.DevExtreme().DataGrid()
-              .ID("gridContainer")
-              .Paging(paging => paging.Enabled(false))
-              .ColumnChooser(c => c.Enabled(true))
-               .FilterRow(filterRow => filterRow
-            .Visible(true)
-            .ApplyFilter(GridApplyFilterMode.Auto))
-          .Selection(s => s.Mode(SelectionMode.Multiple))
-        .Export(e => e.Enabled(true).FileName("sales").AllowExportSelectedData(true))
-        .AllowColumnReordering(true)
-        .Grouping(grouping => grouping.AutoExpandAll(true))
-         .SearchPanel(searchPanel => searchPanel
-            .Visible(true)
-            .Width(240)
-            .Placeholder("Search..."))
-  .GroupPanel(groupPanel => groupPanel.Visible(true))
-    .Paging(paging => paging.PageSize(10))
-     .Editing(e => e.Mode(GridEditMode.Popup)
-            .AllowUpdating(true)
-            .AllowDeleting(true)
-            .AllowAdding(true)
-            .Popup(p => p
-                .Title("Sales Book")
-                .ShowTitle(true)
-                .Width(700)
-                .Height(300)
-                .Position(pos => pos
-                    .My(HorizontalAlignment.Center, VerticalAlignment.Top)
-                    .At(HorizontalAlignment.Center, VerticalAlignment.Top)
-                    .Of(new JS("window"))
-                )
-            )
-        )
-
-      .Columns(columns =>
-      {
-          //columns.Add()
-          //    .DataField("ID")
-          //    .Caption("#");
-
-          columns.Add()
-                .DataField("DatePosted")
-             .DataType(GridColumnDataType.Date).SetCellValue(DateTime.Now.ToShortDateString())
-                .Width(125);
-
-          columns.Add()
-              .DataField("RecNo");
-
-          columns.Add()
-              .DataField("CurrencyType")
-              .Width(130)
-            .GroupIndex(0)
-          .Lookup(lookup => lookup
-              .DataSource(d => d.WebApi().Controller("_Sales").LoadAction("GetCurrencyLookup").Key("ID"))
-              .DisplayExpr("Label")
-              .AllowClearing(false)
-              .ValueExpr("ID"));
-
-          columns.Add()
-              .DataField("Amount")
-              //   .Caption("State")
-              .Width(125);
-          //.Lookup(lookup => lookup
-          //    .DataSource(d => d.WebApi().Controller("DataGridStatesLookup").LoadAction("Get").Key("ID"))
-          //    .DisplayExpr("Name")
-          //    .ValueExpr("ID")
-          //);
-
-          columns.Add()
-                .DataField("Rate");
-          // .DataType(GridColumnDataType.Date)
-          // .Width(125);
-
-          columns.Add()
-              .DataField("TotalAmount").Format("n2");
-
-
-
-          //  .DataType(GridColumnDataType.Date)
-          //.Width(125);
-      })
-
-        .Summary(s => s.TotalItems(items =>
-        {
-            items.Add()
-              .Column("ID")
-              .SummaryType(SummaryType.Count);
-
-
-            items.Add()
-                .Column("TotalAmount")
-                .SummaryType(SummaryType.Sum)
-                .ValueFormat(Format.Currency);
-        })
-
-
-
-
-
-)
-       .OnContentReady(@<text>
-        function(e) {
-        moveEditColumnToLeft(e.component);
-        }
-    </text>)
-    .OnCellPrepared("cell_prepared")
- .DataSource(d => d.WebApi().Controller("_Sales").Key("ID"))
-)
-
-
-<script>
-    function moveEditColumnToLeft(dataGrid) {
-        dataGrid.columnOption("command:edit", {
-            visibleIndex: -1,
-            width: 80
-        });
-    }
-
-    function cell_prepared(e) {
-        if(e.rowType === "data" && e.column.command === "edit") {
-            var isEditing = e.row.isEditing,
-                $links = e.cellElement.find(".dx-link");
-
-            $links.text("");
-
-            if(isEditing) {
-                $links.filter(".dx-link-save").addClass("dx-icon-save");
-                $links.filter(".dx-link-cancel").addClass("dx-icon-revert");
-            } else {
-                $links.filter(".dx-link-edit").addClass("dx-icon-edit");
-                $links.filter(".dx-link-delete").addClass("dx-icon-trash");
-            }
-        }
     }
 </script>
